@@ -1,0 +1,43 @@
+#!/bin/bash
+##########################################################################
+# Creates movie from series of .png image files (sequentially numbered
+# with 4 digits, i.e. img0001, img0002, etc.) in the directory where 
+# the files are located.  
+#
+# OUTPUT: .avi movie
+#
+# **NOTE**: Any file in the directory where this script resides with 
+# the same name will be overwritten **without prompting**.  
+#
+# Movie is saved in .avi format.  Attributes are assigned as follows:
+#   Quality Scale : -qscale
+#   Frame Rate (per second): -r
+#   Video Bit Rate: -b
+#   Force Overwrite of Output Files: Yes
+#   Input Filenames: img###.png
+#   Output Filename: movie.mp4
+#   Key Frame Rate: -g
+#
+# Orginal script: Brock Mosovsky
+# Date:   10/19/09
+##########################################################################
+
+
+echo "Creating .avi movie from image files..."
+echo " "
+moviefile="egg_swim.avi"
+ffmpeg -r 20 -i Sphere_swim_%04d.png -qscale 5  -b 9600 -y -vcodec mjpeg  $moviefile
+
+# Check for errors in ffmpeg's execution.
+if [ "$?" -ne "0" ]; then
+  echo " "
+  echo "ERROR: ffmpeg failed to create movie."
+  echo -e "\aExiting..."
+  exit 1
+fi
+
+# If script gets here, exit success
+echo " "
+echo "Movie successfully created!"
+echo "File currently resides at $(pwd)/$moviefile."
+exit 0
